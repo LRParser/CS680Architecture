@@ -20,6 +20,6 @@ def record():
         with open("recordings/"+timestamp+".wav", "wb") as f:
             f.write(audio.get_wav_data())
 
-        return "Audio recording saved successfully."
+        return timestamp+".wav audio file saved successfully."
     except OSError:
         return "Audio recording failed."
