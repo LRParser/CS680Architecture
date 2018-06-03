@@ -6,7 +6,7 @@ sys.path.append('../')
 import LectureProServer.server
 
 def run():
-    print "Welcome to LecturePro! Would you like to record a new lecture(n), or [future options here]"
+    print("Welcome to LecturePro! Would you like to record a new lecture(n), or [future options here]")
     action = raw_input()
 
     if action == "n":
