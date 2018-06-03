@@ -1,0 +1,3 @@
+Full sentence: The most important quality attributes are: availability, interoperability, modifiability, performance, security, testability, usability
+
+Key phrases: ['important quality attributes', 'availability', 'interoperability', 'modifiability', 'performance', 'security', 'testability', 'usability']

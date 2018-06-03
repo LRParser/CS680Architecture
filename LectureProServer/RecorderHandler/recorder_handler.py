@@ -5,21 +5,20 @@
 
 import speech_recognition as sr
 
-def transcribe(filename):
+def translate(file):
     try:
         r = sr.Recognizer()
 
-        lecture = sr.AudioFile("recordings/"+filename)
+        lecture = sr.AudioFile("../LectureProClient/RecorderHandler/recordings/"+file)
 
         with lecture as source:
             audio = r.record(source)
 
         text = r.recognize_google(audio)
 
-        with open("notes/"+filename[:15]+".txt", "wb") as f:
+        with open("../LectureProServer/RecorderHandler/notes/"+file[:15]+".txt", "wb") as f:
             f.write(text)
 
-        return filename[:15]+".txt file saved successfully."
+        return file[:15]+".txt file saved successfully."
     except OSError:
         return "Audio to text transcribe failed!"
-

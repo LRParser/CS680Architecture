@@ -1,0 +1,1 @@
+The most important quality attributes are: availability, interoperability, modifiability, performance, security, testability, usability
