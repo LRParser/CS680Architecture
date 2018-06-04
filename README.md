@@ -22,8 +22,16 @@ flask run
 Open another terminal and do:
 
 ```
-cd LectureProClient
+cd LectureProServer
 export FLASK_APP=server.py
 export FLASK_ENV=development
 flask run
 ```
+
+### Running as Docker
+1. Install Docker (https://docs.docker.com/install/#desktop)
+2. `cd  LectureProServer`
+3. `docker build -t lecturepro-server:latest .`
+4. `docker run -d -p 8080:5000 lecturepro-server`
+
+Server will be running in port 8080.
