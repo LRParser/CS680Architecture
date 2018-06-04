@@ -1,5 +1,39 @@
 <!doctype html>
-<title>LecturePro</title>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>LecturePro</title>
+  <meta name="description" content="LecturePro">
+  <style type="text/css">
+    #drop_zone {
+      border: 5px solid blue;
+      width: 200px;
+      height: 100px;
+    }
+  </style>
+</head>
+
+<body>
   <h1>LecturePro Client</h1>
-<button>Record a Lecture</button>
-<button>Take a Quiz</button>
+  <button>Record a Lecture</button>
+  <input type="file" name="file" onchange="handleFiles(this.files)">
+  <button>Take a Quiz</button>
+  <form enctype='multipart/form-data' action="https://localhost:8080/Lecture" method="POST">
+    <input type="file" name="file">
+    <input type="submit" value="send">
+  </form>
+</body>
+<script>
+  function handleFiles(files) {
+    const formData = new FormData();
+    formData.append('file', files[0], 'filename');
+    fetch('https://localhost:8080/Lecture', {
+      method: 'POST'
+    })
+      .catch(error => console.error('Error:', error))
+      .then(response => console.log('Success:', response));
+  }
+</script>
+
+</html>
