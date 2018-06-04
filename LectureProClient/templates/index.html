@@ -19,13 +19,14 @@
   <button>Record a Lecture</button>
   <input type="file" name="file" onchange="handleFiles(this.files)">
   <button>Take a Quiz</button>
-  <form enctype='multipart/form-data' action="https://localhost:8080/Lecture" method="POST">
+  <form enctype='multipart/form-data' action="http://localhost:8080/Lecture" method="POST">
     <input type="file" name="file">
     <input type="submit" value="send">
   </form>
 </body>
 <script>
   function handleFiles(files) {
+      console.log("ffff")
     const formData = new FormData();
     formData.append('file', files[0], 'filename');
     fetch('https://localhost:8080/Lecture', {

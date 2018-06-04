@@ -12,15 +12,16 @@ class Lecture(Resource):
     def get(self):
         return "Hello world"
 
-    @app.route('/Lecture', methods=['POST'])
     def post(self):
         if 'file' not in request.files:
             flash('No file part')
-            return redirect(request.urls)
+            # return redirect(request.urls)
+            return "no file"
         file = request.files['file']
         if file.filename == '':
             flash('No selected file')
-            return redirect(request.url)
+            # return redirect(request.url)
+            return "empty file"
         filename = file.filename
         saved_as = os.path.join('data/recordings', filename)
         app.logger.info(saved_as)
