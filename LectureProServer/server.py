@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_restful import Api
+from flask_cors import CORS
 
 import logging
 from logging.handlers import RotatingFileHandler
@@ -10,6 +11,7 @@ from LectureProServer.resources.lecture import Lecture
 from LectureProServer.resources.keyword import Keyword
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 
 api.add_resource(HelloWorld, '/')
