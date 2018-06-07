@@ -1,0 +1,8 @@
+A structure is architectural if it supports reasoning about the system and the system’s properties.
+The reasoning should be about an attribute of the system that is important to some stakeholder.
+These include
+functionality achieved by the system
+the availability of the system in the face of faults
+the difficulty of making specific changes to the system
+the responsiveness of the system to user requests,
+many others.

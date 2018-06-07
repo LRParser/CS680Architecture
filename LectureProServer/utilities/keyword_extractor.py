@@ -18,9 +18,7 @@ def extractPhrases(data):
             for phrase in phrase_list:
                 phrases.append(' '.join(map(str, phrase)))
 
-            note = "Full sentence: " + sentence + "\n" + "\n" + "Key phrases: " + str(phrases)
-
-            return note
+            return [sentence, phrases]
 
     except OSError:
         return "Audio to text transcribe failed!"

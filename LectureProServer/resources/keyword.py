@@ -15,7 +15,7 @@ class Keyword(Resource):
                 keyword = extractPhrases(data)
 
                 with open("data/keywords/" + file[:15] + "_notes.txt", "w") as keywordFileHandler:
-                    keywordFileHandler.write(keyword)
+                    keywordFileHandler.write("Full sentence:{}\n\nKey phrases{}".format(keyword[0], keyword[1]))
 
                 app.logger.info(file[:15] + "_notes.txt file saved successfully.")
                 return keyword
