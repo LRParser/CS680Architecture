@@ -1,0 +1,9 @@
+Full sentence:A structere is architectural if it supports reasoning about the system and the system's properties.
+Key phrases['structere', 'architectural', 'supports reasoning', 'system', 'system', 'properties']
+
+Full sentence:The reasoning should be about an attribute of the system that is important to some stakeholder.
+Key phrases['reasoning', 'attribute', 'system', 'important', 'stakeholder']
+
+Full sentence:These include functionality achieved by the system the availability of the system in the face of faults the diffiuclty of making specific changes to the system the responsiveness of the system to user requests, many others.
+Key phrases['include functionality achieved', 'system', 'availability', 'system', 'face', 'faults', 'diffiuclty', 'making specific changes', 'system', 'responsiveness', 'system', 'user requests', 'many others']
+
