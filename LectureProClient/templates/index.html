@@ -1,5 +1,89 @@
 <!doctype html>
-<title>LecturePro</title>
-  <h1>LecturePro Client</h1>
-<button>Record a Lecture</button>
-<button>Take a Quiz</button>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LecturePro</title>
+  <meta name="description" content="LecturePro">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+</head>
+
+<body>
+  <section class="hero is-primary">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          LecturePro Client
+        </h1>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <h2 class="title is-2">Create a new Lecture Note</h2>
+      <div class="field is-horizontal">
+        <div class="field-body">
+          <div class="field">
+            <label for="lecture-name" class="label">Name</label>
+            <div class="control">
+              <input type="text" name="lecture-name" id="lecture-name" class="input">
+            </div>
+          </div>
+          <div class="file is-fullwidth" style="align-items: flex-end">
+            <label for="file-upload" class="file-label" ondrop="handleDrop(event)" ondragover="prevent(event)" ondragenter="prevent(event)">
+              <input class="file-input" type="file" name="file" id="file-upload" accept="audio/*;" onchange="handleFiles(this.files)" placeholder="Loading input">
+              <span class="file-cta ">
+                <span class="file-icon ">
+                  <i class="fas fa-upload "></i>
+                </span>
+                <span class="file-label ">Upload audio file...</span>
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="control">
+          <textarea class=" lecture-note-textarea textarea" type="text" placeholder="Go ahead, write something or upload an audio file to get transcribed"></textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+<script>
+  function handleFiles(files) {
+    sendAudioFile(files[0])
+  }
+
+  function handleDrop(event) {
+    event.preventDefault()
+    sendAudioFile(event.dataTransfer.files[0])
+  }
+
+  function sendAudioFile(file) {
+    const textArea = document.getElementsByClassName("lecture-note-textarea")[0];
+    textArea.parentNode.classList.add("is-loading")
+    const formData = new FormData();
+    formData.append('file', file, 'filename');
+    fetch('http://localhost:8080/Lecture', {
+      method: 'POST',
+      body: formData,
+      mode: 'cors'
+    })
+      .then(response => response.json())
+      .catch(error => console.error('Error:', error))
+      .then(response => {
+        textArea.parentNode.classList.remove("is-loading")
+        textArea.value = response
+        textArea.focus()
+      });
+  }
+
+  function prevent(event) {
+    event.preventDefault()
+  }
+</script>
+
+</html>
