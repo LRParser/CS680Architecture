@@ -1,0 +1,5 @@
+flask
+SpeechRecognition
+flask-restful
+nltk
+rake-nltk

@@ -1,0 +1,24 @@
+from flask import Flask
+from flask_restful import Api
+
+import logging
+from logging.handlers import RotatingFileHandler
+
+
+from LectureProServer.resources.helloworld import HelloWorld
+from LectureProServer.resources.lecture import Lecture
+from LectureProServer.resources.keyword import Keyword
+
+app = Flask(__name__)
+api = Api(app)
+
+api.add_resource(HelloWorld, '/')
+api.add_resource(Lecture, '/Lecture')
+api.add_resource(Keyword, '/Keyword/<string:file>')
+
+
+if __name__ == '__main__':
+    handler = RotatingFileHandler('foo.log', maxBytes=10000, backupCount=1)
+    handler.setLevel(logging.INFO)
+    app.logger.addHandler(handler)
+    app.run(debug=True, host='0.0.0.0')
