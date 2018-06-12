@@ -12,13 +12,16 @@ class Keyword(Resource):
                 data = noteFileHandler.read()
                 # Create new ExtractorDelegator to handle keyword extractor
                 # extractor_delegator = keyword_extractor
-                keyword = extractPhrases(data)
-
+                results = extractPhrases(data)
                 with open("data/keywords/" + file[:15] + "_notes.txt", "w") as keywordFileHandler:
-                    keywordFileHandler.write(keyword)
+                    for keyword in results:
+                        keywordFileHandler.write("Full sentence:{}\nKey phrases{}\n\n".format(keyword[0], keyword[1]))
+
 
                 app.logger.info(file[:15] + "_notes.txt file saved successfully.")
-                return keyword
+
+                return results
+
         except OSError as err:
             app.logger.info("OS error: {0}".format(err))
             return "Audio to text transcribe failed!", 422

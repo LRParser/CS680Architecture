@@ -5,10 +5,10 @@ from flask_cors import CORS
 import logging
 from logging.handlers import RotatingFileHandler
 
-
 from LectureProServer.resources.helloworld import HelloWorld
 from LectureProServer.resources.lecture import Lecture
 from LectureProServer.resources.keyword import Keyword
+from LectureProServer.resources.search import Search
 
 app = Flask(__name__)
 CORS(app)
@@ -17,6 +17,7 @@ api = Api(app)
 api.add_resource(HelloWorld, '/')
 api.add_resource(Lecture, '/Lecture')
 api.add_resource(Keyword, '/Keyword/<string:file>')
+api.add_resource(Search, "/Search/<string:query>")
 
 
 if __name__ == '__main__':

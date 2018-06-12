@@ -11,6 +11,8 @@ def extractPhrases(data):
 
         sentences = nltk.tokenize.sent_tokenize(data)
 
+        result_list = []
+
         for sentence in sentences:
             word_list = [word.lower() for word in wordpunct_tokenize(sentence)]
             phrase_list = r._get_phrase_list_from_words(word_list)
@@ -18,9 +20,9 @@ def extractPhrases(data):
             for phrase in phrase_list:
                 phrases.append(' '.join(map(str, phrase)))
 
-            note = "Full sentence: " + sentence + "\n" + "\n" + "Key phrases: " + str(phrases)
+            result_list.append([sentence, phrases[:]])
 
-            return note
+        return result_list
 
     except OSError:
         return "Audio to text transcribe failed!"
