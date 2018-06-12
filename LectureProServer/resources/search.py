@@ -12,10 +12,7 @@ class Search(Resource):
     def get(self, query):
         app.logger.info(query)
 
-        test = extractPhrases(query)
-        print(test)
-        query_keywords = [x[1] for x in test]
-        print(query_keywords)
+        query_keywords = [x[1] for x in extractPhrases(query)]
         query_keywords = [x for sublist in query_keywords for x in sublist]
         query_keywords = [x.lower().split() for x in query_keywords]
         query_keywords = reduce(operator.concat, query_keywords)
@@ -24,7 +21,6 @@ class Search(Resource):
 
         for notes_file in os.listdir("data/notes/"):
             if notes_file.endswith(".txt"):
-                print(notes_file)
                 with open("data/notes/" + notes_file, "r") as noteFileHandler:
                     data = noteFileHandler.read()
                     note_keywords = [x[1] for x in extractPhrases(data)]
@@ -35,7 +31,6 @@ class Search(Resource):
                 for query_keyword in query_keywords:
                     for note_keyword in note_keywords:
                         if query_keyword in note_keyword:
-                            print("hit")
                             file_hits += 1
 
                 if file_hits > 0:
