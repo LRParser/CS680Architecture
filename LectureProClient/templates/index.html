@@ -90,7 +90,7 @@
 
 
     </div>
-              <button onclick="addInputQuestionRow()">Add Another Question</button>
+              <button onclick="createNewQuestion()">Add Another Question</button>
               <button onclick="takeQuiz()">Take Quiz</button>
   </section>
   <section id="take-quiz-section" style="display: none;" class="section take-quiz-section">
@@ -136,7 +136,7 @@
   const takeQuizSection = document.getElementById('take-quiz-questions-section');
 
 
-  function addInputQuestionRow() {
+  function createNewQuestion() {
       console.log("Running")
       div1 = document.createElement("div");
       div1.setAttribute("class", "field is-horizontal");
@@ -256,6 +256,12 @@ foundAnswers = [];
       console.log("Added take section")
   }
 
+
+  function showRequests(score) {
+               alert("Your score is: "+score*100+"%");
+
+  }
+
   function scoreQuiz() {
         guessedAnswers = document.getElementsByName("take-question-answer")
       i = 0;
@@ -270,7 +276,7 @@ foundAnswers = [];
       });
          score = answeredCorrect/i;
          console.log("Score is: "+answeredCorrect/i);
-         alert("Your score is: "+score*100+"%");
+         showRequests(score);
   }
 
 function takeQuiz() {
