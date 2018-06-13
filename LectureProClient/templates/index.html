@@ -19,18 +19,21 @@
         </h1>
         <div class="field">
           <div class="control has-icons-left">
-            <input class="input is-rounded" type="text" placeholder="Search for a lecture note" id="search-bar" list="lecture-notes-search-results">
+            <input class="input" type="text" placeholder="Search for a lecture note by keyword" id="search-bar">
             <span class="icon is-left">
               <i class="fas fa-search"></i>
             </span>
-            <datalist id="lecture-notes-search-results">
-            </datalist>
+          </div>
+          <div class="control is-expanded">
+            <div class="select is-multiple is-fullwidth is-invisible" style="position: absolute; margin-top: 2%">
+              <select id="lecture-notes-search-results-select" multiple size=0></select>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
-  <section class="section">
+  <section class="section create-new-lecture-note-section">
     <div class="container">
       <h2 class="title is-2">Create a new Lecture Note</h2>
       <div class="field is-horizontal">
@@ -92,30 +95,38 @@
       });
   }
 
+  const dataListSelect = document.getElementById('lecture-notes-search-results-select');
+  function addToDataList(data, searchString) {
+    console.log(data)
+    dataListSelect.innerHTML = ""
+    dataListSelect.setAttribute('size', data.length)
+    if (data.length > 0)
+      dataListSelect.parentNode.classList.remove("is-invisible")
+    data.forEach(filename => {
+      const option = document.createElement("option")
+      option.setAttribute('value', searchString)
+      option.innerHTML = filename
+      dataListSelect.appendChild(option)
+    })
+  }
+
   document.getElementById('search-bar').addEventListener('input', search)
   function search(event) {
+    dataListSelect.innerHTML = "";
+    dataListSelect.parentNode.classList.add("is-invisible")
+    if (event.srcElement.value.length < 2) return false
     fetch('http://localhost:8080/Search/' + event.srcElement.value, {
       mode: 'cors'
-    }).then(response => response.json()).then(addToDataList)
-    if (event.keyCode == 13) {
-
-      event.preventDefault()
-      return false;
-    }
+    }).then(response => response.json()).then(data => addToDataList(data, event.srcElement.value))
     event.preventDefault()
     return true;
   }
 
-  const dataList = document.getElementById('lecture-notes-search-results');
-  function addToDataList(data) {
-    console.log(data)
-    dataList.innerHTML = ""
-    data.forEach(filename => {
-      const option = document.createElement("option")
-      option.setAttribute('value', filename)
-      dataList.appendChild(option)
-    })
+  const createNewLectureNoteForm = document.getElementById('create-new-lecture-note-section')
+  function displayLectureNote(lectureNodeName) {
+    createNewLectureNoteForm.classList.add('is-invisible')
   }
+
 
   function prevent(event) {
     event.preventDefault()
