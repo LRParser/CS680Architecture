@@ -4,7 +4,7 @@ CS680Architecture
 
 ## Installation
 
-pip install flask
+pip install flask flask-restful speechrecognition rake-nltk
 
 ## Running the client
 
