@@ -64,6 +64,42 @@
       </div>
     </div>
   </section>
+  <section id="create-quiz-section" class="section create-new-quiz-section">
+    <div id="quiz-section" class="container">
+      <h2 class="title is-2">Create a new Quiz</h2>
+      <div class="field is-horizontal">
+
+        <div class="field-body">
+          <div class="field">
+            <label for="question-name" class="label">Question</label>
+            <div class="control">
+              <input type="text" name="question-name" id="question-name" class="input">
+            </div>
+          </div>
+          <div class="field">
+            <label for="question-answer" class="label">Answer</label>
+            <div class="control">
+              <input type="text" name="question-answer" id="question-answer" class="input">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+
+
+    </div>
+              <button onclick="addInputQuestionRow()">Add Another Question</button>
+              <button onclick="takeQuiz()">Take Quiz</button>
+  </section>
+  <section id="take-quiz-section" style="display: none;" class="section take-quiz-section">
+    <div id="take-quiz-questions-section" class="container">
+      <h2 class="title is-2">Take Quiz</h2>
+
+    </div>
+    <button onclick="scoreQuiz()">Score Quiz</button>
+  </section>
 
 </body>
 <script>
@@ -96,6 +132,169 @@
   }
 
   const dataListSelect = document.getElementById('lecture-notes-search-results-select');
+  const inputQuizSection = document.getElementById('quiz-section');
+  const takeQuizSection = document.getElementById('take-quiz-questions-section');
+
+
+  function addInputQuestionRow() {
+      console.log("Running")
+      div1 = document.createElement("div");
+      div1.setAttribute("class", "field is-horizontal");
+      div2 = document.createElement("div");
+      div2.setAttribute("class", "field-body");
+
+      div3 = document.createElement("div");
+      div3.setAttribute("class", "field");
+
+      label1 = document.createElement("label");
+      label1.setAttribute("for", "question-name");
+      label1.setAttribute("class", "label");
+      label1.innerHTML = "Question";
+
+      div4 = document.createElement("div");
+      div4.setAttribute("class", "control");
+      input1 = document.createElement("input");
+      input1.setAttribute("type", "text");
+      input1.setAttribute("name", "question-name");
+      input1.setAttribute("id", "question-name");
+      input1.setAttribute("class", "input");
+      div4.appendChild(input1);
+
+      div3.appendChild(label1);
+      div3.appendChild(div4);
+
+      div5 = document.createElement("div");
+      div5.setAttribute("class", "field");
+      label2 = document.createElement("label");
+      label2.setAttribute("for", "question-answer");
+      label2.setAttribute("class", "label");
+      label2.innerHTML = "Answer";
+      div6 = document.createElement("div");
+      div6.setAttribute("class", "control");
+      input2 = document.createElement("input");
+      input2.setAttribute("type", "text");
+      input2.setAttribute("name", "question-answer");
+      input2.setAttribute("id", "question-answer");
+      input2.setAttribute("class", "input");
+      div6.appendChild(input2);
+
+      div5.appendChild(label2);
+      div5.appendChild(div6);
+
+      div2.appendChild(div3);
+      div2.append(div5);
+
+      div1.appendChild(div2);
+      inputQuizSection.appendChild(div1);
+      console.log("Added section")
+  }
+
+foundQuestions = [];
+foundAnswers = [];
+
+  function addInputAnswerRow(q, a) {
+      console.log("Running")
+      div1 = document.createElement("div");
+      div1.setAttribute("class", "field is-horizontal");
+      div2 = document.createElement("div");
+      div2.setAttribute("class", "field-body");
+
+      div3 = document.createElement("div");
+      div3.setAttribute("class", "field");
+
+      label1 = document.createElement("label");
+      label1.setAttribute("for", "take-question-name");
+      label1.setAttribute("class", "label");
+      label1.innerHTML = "Question";
+
+      div4 = document.createElement("div");
+      div4.setAttribute("class", "control");
+      input1 = document.createElement("input");
+
+      input1.setAttribute("type", "text");
+      input1.setAttribute("name", "take-question-name");
+      input1.setAttribute("id", "take-question-name");
+      input1.setAttribute("class", "input");
+
+      input1.readOnly = true;
+      input1.value = q;
+      div4.appendChild(input1);
+
+      div3.appendChild(label1);
+      div3.appendChild(div4);
+
+      div5 = document.createElement("div");
+      div5.setAttribute("class", "field");
+      label2 = document.createElement("label");
+      label2.setAttribute("for", "take-question-answer");
+      label2.setAttribute("class", "label");
+      label2.innerHTML = "Answer";
+      div6 = document.createElement("div");
+      div6.setAttribute("class", "control");
+      select2 = document.createElement("select");
+      select2.setAttribute("type", "text");
+      select2.setAttribute("name", "take-question-answer");
+      select2.setAttribute("id", "take-question-answer");
+      select2.setAttribute("class", "input");
+
+      foundAnswers.forEach(answer => {
+        option1 = document.createElement("option");
+        option1.innerHTML = answer;
+        select2.appendChild(option1);
+      });
+
+      div6.appendChild(select2);
+
+      div5.appendChild(label2);
+      div5.appendChild(div6);
+
+      div2.appendChild(div3);
+      div2.append(div5);
+
+      div1.appendChild(div2);
+      takeQuizSection.appendChild(div1);
+      console.log("Added take section")
+  }
+
+  function scoreQuiz() {
+        guessedAnswers = document.getElementsByName("take-question-answer")
+      i = 0;
+        answeredCorrect = 0;
+         guessedAnswers.forEach(guessedAnswer => {
+            console.log("Guessed: "+guessedAnswer.value);
+            correctAnswer = foundAnswers[i];
+            if (guessedAnswer.value.match(correctAnswer)) {
+                answeredCorrect++;
+            }
+            i++;
+      });
+         score = answeredCorrect/i;
+         console.log("Score is: "+answeredCorrect/i);
+         alert("Your score is: "+score*100+"%");
+  }
+
+function takeQuiz() {
+
+      document.getElementById("take-quiz-section").style.display = "";
+      document.getElementById("create-quiz-section").style.display = "none";
+
+      questions = document.getElementsByName("question-name")
+      questions.forEach(question => {
+         console.log(question.value);
+          foundQuestions.push(question.value)
+      });
+    answers = document.getElementsByName("question-answer")
+         answers.forEach(answer => {
+         console.log(answer.value);
+         foundAnswers.push(answer.value);
+      });
+    for(i = 0; i < foundQuestions.length; i++) {
+        addInputAnswerRow(foundQuestions[i],foundAnswers[i])
+    }
+
+}
+
+
   function addToDataList(data, searchString) {
     console.log(data)
     dataListSelect.innerHTML = ""
