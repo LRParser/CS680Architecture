@@ -25,7 +25,7 @@
             </span>
           </div>
           <div class="control is-expanded">
-            <div class="select is-multiple is-fullwidth is-hidden" style="position: absolute; margin-top: 2%">
+            <div class="select is-multiple is-fullwidth is-hidden" style="position: absolute; margin-top: 2%; z-index: 1;">
               <select id="lecture-notes-search-results-select" multiple size=0></select>
             </div>
           </div>
@@ -55,7 +55,7 @@
           </li>
         </ul>
       </div>
-      <div class="container" id="create-new-lecture-note">
+      <form class="container" id="create-new-lecture-note" onsubmit="saveLectureNote(event)">
         <h2 class="title is-2">Create a new Lecture Note</h2>
         <div class="field is-horizontal">
           <div class="field-body">
@@ -80,11 +80,14 @@
         </div>
         <div class="container">
           <div class="control">
-            <textarea class=" lecture-note-textarea textarea" type="text" placeholder="Go ahead, write something or upload an audio file to get transcribed"></textarea>
+            <textarea class=" lecture-note-textarea textarea" type="text" form="create-new-lecture-note" name="lecture-text" placeholder="Go ahead, write something or upload an audio file to get transcribed"></textarea>
           </div>
         </div>
-      </div>
-      <div class="container is-hidden" id="edit-lecture-note">
+        <div class="container">
+          <input type='submit' class="button is-success" value="Save" />
+        </div>
+      </form>
+      <form class="container is-hidden" id="edit-lecture-note" onsubmit="saveLectureNote(event)">
         <h2 class="title is-2">Edit Lecture Note</h2>
         <div class="field is-horizontal">
           <div class="field-body">
@@ -98,10 +101,14 @@
         </div>
         <div class="container">
           <div class="control">
-            <textarea id="edit-note-text" class=" lecture-note-textarea textarea" type="text" placeholder="Go ahead, write something or upload an audio file to get transcribed"></textarea>
+            <textarea id="edit-note-text" class="lecture-note-textarea textarea" type="text" form="edit-lecture-note" name="lecture-text"
+              placeholder="Go ahead, write something or upload an audio file to get transcribed"></textarea>
           </div>
         </div>
-      </div>
+        <div class="container">
+          <input type='submit' class="button is-success" value="Save" />
+        </div>
+      </form>
     </div>
   </section>
 
@@ -202,6 +209,20 @@
   searchBar.addEventListener('focus', onSearchBarFocus)
   function onSearchBarFocus() {
     dataListSelect.classList.remove('is-hidden')
+  }
+
+  function saveLectureNote(event) {
+    const formData = new FormData(event.srcElement)
+    formData.delete('file')
+    for (const data of formData.entries()) {
+      console.log(data)
+    }
+    fetch('http://localhost:8080/Note/filename', {
+      method: 'POST',
+      body: formData,
+      mode: 'cors'
+    })
+    prevent(event)
   }
 
   function prevent(event) {
