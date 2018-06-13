@@ -4,7 +4,7 @@ from functools import reduce
 from operator import itemgetter
 import operator
 from flask_restful import Resource
-from flask import current_app as app, Response
+from flask import current_app as app, Response, request
 
 from LectureProServer.utilities.keyword_extractor import extractPhrases
 
@@ -23,3 +23,9 @@ class Note(Resource):
 
         return Response(json.dumps(results),  mimetype='application/json')
 
+    def post(self, file):
+        filename = request.form.get('lecture-name')
+        text = request.form.get('lecture-text')
+        with open("data/notes/" + filename[:15] + ".txt", "w") as f:
+            f.write(text)
+        return True

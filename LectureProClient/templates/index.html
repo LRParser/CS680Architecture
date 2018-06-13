@@ -25,7 +25,7 @@
             </span>
           </div>
           <div class="control is-expanded">
-            <div class="select is-multiple is-fullwidth is-invisible" style="position: absolute; margin-top: 2%">
+            <div class="select is-multiple is-fullwidth is-hidden" style="position: absolute; margin-top: 2%; z-index: 1;">
               <select id="lecture-notes-search-results-select" multiple size=0></select>
             </div>
           </div>
@@ -33,35 +33,82 @@
       </div>
     </div>
   </section>
-  <section class="section create-new-lecture-note-section">
+  <section class="section">
     <div class="container">
-      <h2 class="title is-2">Create a new Lecture Note</h2>
-      <div class="field is-horizontal">
-        <div class="field-body">
-          <div class="field">
-            <label for="lecture-name" class="label">Name</label>
-            <div class="control">
-              <input type="text" name="lecture-name" id="lecture-name" class="input">
+      <div class="tabs is-boxed">
+        <ul>
+          <li class="is-active" id="new-note-tab">
+            <a onClick="displayNewNoteForm(event)">
+              <span class="icon is-small">
+                <i class="fas fa-plus" aria-hidden="true"></i>
+              </span>
+              <span>Create a new Lecture Note</span>
+            </a>
+          </li>
+          <li id="edit-note-tab">
+            <a onclick="focusOnSearchBar(event)">
+              <span class="icon is-small">
+                <i class="fas fa-edit" aria-hidden="true"></i>
+              </span>
+              <span id="edit-note-tab-title">Search and select a Lecture Note to edit it</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <form class="container" id="create-new-lecture-note" onsubmit="saveLectureNote(event)">
+        <h2 class="title is-2">Create a new Lecture Note</h2>
+        <div class="field is-horizontal">
+          <div class="field-body">
+            <div class="field">
+              <label for="lecture-name" class="label">Name</label>
+              <div class="control">
+                <input type="text" name="lecture-name" id="lecture-name" class="input">
+              </div>
+            </div>
+            <div class="file is-fullwidth" style="align-items: flex-end">
+              <label for="file-upload" class="file-label" ondrop="handleDrop(event)" ondragover="prevent(event)" ondragenter="prevent(event)">
+                <input class="file-input" type="file" name="file" id="file-upload" accept="audio/*;" onchange="handleFiles(this.files)" placeholder="Loading input">
+                <span class="file-cta ">
+                  <span class="file-icon ">
+                    <i class="fas fa-upload "></i>
+                  </span>
+                  <span class="file-label ">Upload audio file...</span>
+                </span>
+              </label>
             </div>
           </div>
-          <div class="file is-fullwidth" style="align-items: flex-end">
-            <label for="file-upload" class="file-label" ondrop="handleDrop(event)" ondragover="prevent(event)" ondragenter="prevent(event)">
-              <input class="file-input" type="file" name="file" id="file-upload" accept="audio/*;" onchange="handleFiles(this.files)" placeholder="Loading input">
-              <span class="file-cta ">
-                <span class="file-icon ">
-                  <i class="fas fa-upload "></i>
-                </span>
-                <span class="file-label ">Upload audio file...</span>
-              </span>
-            </label>
+        </div>
+        <div class="container">
+          <div class="control">
+            <textarea class=" lecture-note-textarea textarea" type="text" form="create-new-lecture-note" name="lecture-text" placeholder="Go ahead, write something or upload an audio file to get transcribed"></textarea>
           </div>
         </div>
-      </div>
-      <div class="container">
-        <div class="control">
-          <textarea class=" lecture-note-textarea textarea" type="text" placeholder="Go ahead, write something or upload an audio file to get transcribed"></textarea>
+        <div class="container">
+          <input type='submit' class="button is-success" value="Save" />
         </div>
-      </div>
+      </form>
+      <form class="container is-hidden" id="edit-lecture-note" onsubmit="saveLectureNote(event)">
+        <h2 class="title is-2">Edit Lecture Note</h2>
+        <div class="field is-horizontal">
+          <div class="field-body">
+            <div class="field">
+              <label for="lecture-name" class="label">Name</label>
+              <div class="control">
+                <input type="text" name="lecture-name" id="edit-note-name" class="input">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="control">
+            <textarea id="edit-note-text" class="lecture-note-textarea textarea" type="text" form="edit-lecture-note" name="lecture-text"
+              placeholder="Go ahead, write something or upload an audio file to get transcribed"></textarea>
+          </div>
+        </div>
+        <div class="container">
+          <input type='submit' class="button is-success" value="Save" />
+        </div>
+      </form>
     </div>
   </section>
   <section id="create-quiz-section" class="section create-new-quiz-section">
@@ -306,11 +353,12 @@ function takeQuiz() {
     dataListSelect.innerHTML = ""
     dataListSelect.setAttribute('size', data.length)
     if (data.length > 0)
-      dataListSelect.parentNode.classList.remove("is-invisible")
+      dataListSelect.parentNode.classList.remove("is-hidden")
     data.forEach(filename => {
       const option = document.createElement("option")
       option.setAttribute('value', searchString)
       option.innerHTML = filename
+      option.addEventListener('click', displayLectureNote(filename))
       dataListSelect.appendChild(option)
     })
   }
@@ -318,7 +366,7 @@ function takeQuiz() {
   document.getElementById('search-bar').addEventListener('input', search)
   function search(event) {
     dataListSelect.innerHTML = "";
-    dataListSelect.parentNode.classList.add("is-invisible")
+    dataListSelect.parentNode.classList.add("is-hidden")
     if (event.srcElement.value.length < 2) return false
     fetch('http://localhost:8080/Search/' + event.srcElement.value, {
       mode: 'cors'
@@ -327,11 +375,60 @@ function takeQuiz() {
     return true;
   }
 
-  const createNewLectureNoteForm = document.getElementById('create-new-lecture-note-section')
-  function displayLectureNote(lectureNodeName) {
-    createNewLectureNoteForm.classList.add('is-invisible')
+  const createNewLectureNoteForm = document.getElementById('create-new-lecture-note')
+  const editLectureNoteForm = document.getElementById('edit-lecture-note')
+  const newNoteTab = document.getElementById('new-note-tab')
+  const editNoteTab = document.getElementById('edit-note-tab')
+  const editNoteTabTitle = document.getElementById('edit-note-tab-title')
+  const editNoteName = document.getElementById('edit-note-name')
+  const editNoteText = document.getElementById('edit-note-text')
+  function displayLectureNote(lectureNoteName) {
+    return (event) => {
+      createNewLectureNoteForm.classList.add('is-hidden')
+      event.srcElement.parentNode.classList.add('is-hidden')
+      editLectureNoteForm.classList.remove('is-hidden')
+      newNoteTab.classList.remove('is-active')
+      editNoteTab.classList.add('is-active')
+      editNoteTabTitle.innerHTML = lectureNoteName
+      fetch('http://localhost:8080/Note/' + lectureNoteName)
+        .then(response => response.json())
+        .then(json => {
+          editNoteName.value = lectureNoteName;
+          editNoteText.innerHTML = json
+        })
+    }
   }
 
+  function displayNewNoteForm() {
+    createNewLectureNoteForm.classList.remove('is-hidden')
+    editLectureNoteForm.classList.add('is-hidden')
+    editNoteTab.classList.remove('is-active')
+    newNoteTab.classList.add('is-active')
+  }
+
+  const searchBar = document.getElementById('search-bar')
+  function focusOnSearchBar() {
+    searchBar.focus()
+  }
+
+  searchBar.addEventListener('focus', onSearchBarFocus)
+  function onSearchBarFocus() {
+    dataListSelect.classList.remove('is-hidden')
+  }
+
+  function saveLectureNote(event) {
+    const formData = new FormData(event.srcElement)
+    formData.delete('file')
+    for (const data of formData.entries()) {
+      console.log(data)
+    }
+    fetch('http://localhost:8080/Note/filename', {
+      method: 'POST',
+      body: formData,
+      mode: 'cors'
+    })
+    prevent(event)
+  }
 
   function prevent(event) {
     event.preventDefault()
