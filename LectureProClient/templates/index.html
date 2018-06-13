@@ -17,6 +17,16 @@
         <h1 class="title">
           LecturePro Client
         </h1>
+        <div class="field">
+          <div class="control has-icons-left">
+            <input class="input is-rounded" type="text" placeholder="Search for a lecture note" id="search-bar" list="lecture-notes-search-results">
+            <span class="icon is-left">
+              <i class="fas fa-search"></i>
+            </span>
+            <datalist id="lecture-notes-search-results">
+            </datalist>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -51,6 +61,7 @@
       </div>
     </div>
   </section>
+
 </body>
 <script>
   function handleFiles(files) {
@@ -81,9 +92,35 @@
       });
   }
 
+  document.getElementById('search-bar').addEventListener('input', search)
+  function search(event) {
+    fetch('http://localhost:8080/Search/' + event.srcElement.value, {
+      mode: 'cors'
+    }).then(response => response.json()).then(addToDataList)
+    if (event.keyCode == 13) {
+
+      event.preventDefault()
+      return false;
+    }
+    event.preventDefault()
+    return true;
+  }
+
+  const dataList = document.getElementById('lecture-notes-search-results');
+  function addToDataList(data) {
+    console.log(data)
+    dataList.innerHTML = ""
+    data.forEach(filename => {
+      const option = document.createElement("option")
+      option.setAttribute('value', filename)
+      dataList.appendChild(option)
+    })
+  }
+
   function prevent(event) {
     event.preventDefault()
   }
+
 </script>
 
 </html>
