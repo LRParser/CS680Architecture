@@ -17,18 +17,36 @@
         <h1 class="title">
           LecturePro Client
         </h1>
-        <div class="field">
+
+      </div>
+    </div>
+  </section>
+  <section class="section">
+      <div class="container">
+          <h2 class="title is-2">Search for Existing Lecture Note</h2>
+          <div class="field">
           <div class="control has-icons-left">
             <input class="input is-rounded" type="text" placeholder="Search for a lecture note" id="search-bar" list="lecture-notes-search-results">
             <span class="icon is-left">
               <i class="fas fa-search"></i>
             </span>
-            <datalist id="lecture-notes-search-results">
-            </datalist>
           </div>
         </div>
+                    <div class="field">
+          <div class="control has-icons-left">
+                            <span style="margin-left: 2rem">
+            <h3 class="title is-3">Search Results:</h3>
+              <ul class="field" id="found-notes" style="margin-left: 2rem">
+              </ul>
+                  </span>
+          </div>
+        </div>
+
+
+
+
+
       </div>
-    </div>
   </section>
   <section class="section">
     <div class="container">
@@ -96,7 +114,7 @@
   function search(event) {
     fetch('http://localhost:8080/Search/' + event.srcElement.value, {
       mode: 'cors'
-    }).then(response => response.json()).then(addToDataList)
+    }).then(response => response.json()).then(addToFoundNotes)
     if (event.keyCode == 13) {
 
       event.preventDefault()
@@ -106,14 +124,15 @@
     return true;
   }
 
-  const dataList = document.getElementById('lecture-notes-search-results');
-  function addToDataList(data) {
+  const foundNotes = document.getElementById('found-notes');
+  function addToFoundNotes(data) {
     console.log(data)
-    dataList.innerHTML = ""
+    foundNotes.innerHTML = ""
     data.forEach(filename => {
-      const option = document.createElement("option")
-      option.setAttribute('value', filename)
-      dataList.appendChild(option)
+
+      const li = document.createElement("li")
+      li.innerHTML = filename
+      foundNotes.appendChild(li)
     })
   }
 
