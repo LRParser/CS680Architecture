@@ -131,15 +131,22 @@
           </div>
         </div>
       </div>
+        <div id="quiz-buttons-section">
+            <button onclick="createNewQuestion()">Add Another Question</button>
+            <button onclick="takeQuiz()">Take Quiz</button>
+        </div>
+
     </div>
-    <button onclick="createNewQuestion()">Add Another Question</button>
-    <button onclick="takeQuiz()">Take Quiz</button>
+
   </section>
   <section id="take-quiz-section" style="display: none;" class="section take-quiz-section">
     <div id="take-quiz-questions-section" class="container">
       <h2 class="title is-2">Take Quiz</h2>
+        <div id="score-quiz-buttons-section">
+                <button onclick="scoreQuizPartialCredit()">Score Quiz (Partial Credit)</button>
+                <button onclick="scoreQuizAllOrNone()">Score Quiz (All or None)</button>
+        </div>
     </div>
-    <button onclick="scoreQuiz()">Score Quiz</button>
   </section>
 </body>
 <script>
@@ -174,7 +181,8 @@
   const dataListSelect = document.getElementById('lecture-notes-search-results-select');
   const inputQuizSection = document.getElementById('quiz-section');
   const takeQuizSection = document.getElementById('take-quiz-questions-section');
-
+  const quizButtonsSection = document.getElementById('quiz-buttons-section')
+  const scoreQuizButtonsSection = document.getElementById('score-quiz-buttons-section')
 
   function createNewQuestion() {
     console.log("Running")
@@ -225,7 +233,7 @@
     div2.append(div5);
 
     div1.appendChild(div2);
-    inputQuizSection.appendChild(div1);
+    inputQuizSection.insertBefore(div1,quizButtonsSection);
     console.log("Added section")
   }
 
@@ -292,7 +300,7 @@
     div2.append(div5);
 
     div1.appendChild(div2);
-    takeQuizSection.appendChild(div1);
+    takeQuizSection.insertBefore(div1,scoreQuizButtonsSection);
     console.log("Added take section")
   }
 
@@ -301,7 +309,15 @@
     alert("Your score is: " + score * 100 + "%");
   }
 
-  function scoreQuiz() {
+  function scoreQuizPartialCredit() {
+    scoreQuiz("partial");
+  }
+
+  function scoreQuizAllOrNone() {
+      scoreQuiz("all_or_none");
+  }
+
+  function scoreQuiz(creditType) {
     guessedAnswers = document.getElementsByName("take-question-answer")
     i = 0;
     answeredCorrect = 0;
@@ -313,7 +329,18 @@
       }
       i++;
     });
-    score = answeredCorrect / i;
+    if (creditType.match("partial")) {
+        score = answeredCorrect / i;
+    }
+    else {
+        if (answeredCorrect === i) {
+            score = 1;
+        }
+        else {
+            score = 0;
+        }
+    }
+
     console.log("Score is: " + answeredCorrect / i);
     showRequests(score);
   }

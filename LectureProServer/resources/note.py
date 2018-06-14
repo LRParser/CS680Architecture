@@ -26,6 +26,6 @@ class Note(Resource):
     def post(self, file):
         filename = request.form.get('lecture-name')
         text = request.form.get('lecture-text')
-        with open("data/notes/" + filename[:15] + ".txt", "w") as f:
+        with open("data/notes/" + filename[:15], "w") as f:
             f.write(text)
         return True
