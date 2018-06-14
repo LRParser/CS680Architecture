@@ -2,6 +2,12 @@
 
 CS680Architecture
 
+## Demo
+
+A demo is available at:
+
+https://youtu.be/-_Mgz821fqw
+
 ## Installation
 
 Copy the entire CS680Architecture folder to both client and server.
