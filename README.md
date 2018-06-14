@@ -4,7 +4,13 @@ CS680Architecture
 
 ## Installation
 
+Copy the entire CS680Architecture folder to both client and server.
+
+Ensure that Python 3.6 or 2.7 is installed. Any OS supporting Python should be fine. Ideally Python 3.6 should be used. The pip utility should be available. Install the below packages when inside the CS680Architecture folder on both client and server via the following command:
+
 pip install flask flask-restful speechrecognition rake-nltk
+
+
 
 ## Running the client
 
